@@ -8,21 +8,17 @@ namespace LoggingUtil
         private String currentPath;
         private static DateTime StartTime;
 
-        /*
-         * Creates a directory called DiavoloLogs the sets the working path to that directory
-         */
+        /// <summary>constructor <c>CustomLogger</c> Initializes the logger.</summary>
         public CustomLogger()
         {
             createDirectory();
             currentPath = Directory.GetCurrentDirectory() + @"\DiavoloLogs\AdvancedLogger.txt";
             StartTime = DateTime.Now;
-            info("------------------------------------------------------------");
+            Info("------------------------------------------------------------");
         }
 
-        /*
-         * Prints all the strings in receives, if files is moved/deleted/renamed it will create a new one
-         */
-        public void info(string format, params object[] args)
+        /// <summary>function <c>Info</c> Appends the string to the file with formatting.</summary>
+        public void Info(string format, params object[] args)
         {
             if (!File.Exists(currentPath))
             {
@@ -36,7 +32,6 @@ namespace LoggingUtil
 
             using (StreamWriter sw = File.AppendText(currentPath))
             {
-                sw.WriteLine(format);
                 sw.Write(FormatTime(DateTime.Now - StartTime));
                 sw.Write(" ");
                 sw.WriteLine(string.Format(format, args));
@@ -50,7 +45,7 @@ namespace LoggingUtil
             {
                 DirectoryInfo di = Directory.CreateDirectory(Directory.GetCurrentDirectory() + @"\DiavoloLogs");
             }
-            
+
             catch (Exception e)
             {
                 Console.WriteLine("The process failed: {0}", e.ToString());
