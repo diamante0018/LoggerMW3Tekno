@@ -12,6 +12,7 @@ bin/Release/LoggingUtil.dll
 bin/Release/LoggingUtil.pdb
 obj/Debug/.NETFramework,Version=v4.0.AssemblyAttributes.cs
 obj/Debug/Logger.csprojAssemblyReference.cache
+obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
 obj/Release/.NETFramework,Version=v4.0.AssemblyAttributes.cs
 obj/Release/CustomLogger.csproj.CopyComplete
 obj/Release/CustomLogger.csproj.CoreCompileInputs.cache
@@ -23,3 +24,4 @@ obj/Release/Logger.csproj.CoreCompileInputs.cache
 obj/Release/Logger.csproj.FileListAbsolute.txt
 obj/Release/Logger.csprojAssemblyReference.cache
 /bin/Release/InfinityScript.pdb
+
