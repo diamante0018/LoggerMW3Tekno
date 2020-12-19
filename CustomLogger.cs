@@ -31,7 +31,6 @@ namespace LoggingUtil
                 }
             }
 
-
             using (StreamWriter sw = File.AppendText(currentPath))
             {
                 sw.Write(FormatTime(DateTime.Now - StartTime));
