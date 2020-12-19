@@ -5,14 +5,16 @@ namespace LoggingUtil
 {
     class CustomLogger
     {
-        private String currentPath;
+        private readonly string currentPath;
         private static DateTime StartTime;
 
         /// <summary>constructor <c>CustomLogger</c> Initializes the logger.</summary>
         public CustomLogger()
         {
-            createDirectory();
-            currentPath = Directory.GetCurrentDirectory() + @"\DiavoloLogs\AdvancedLogger.txt";
+            DateTime dateTime = DateTime.UtcNow.Date;
+            string formattedTime = dateTime.ToString("dd/MM/yyyy").Replace("/","");
+            CreateDirectory();
+            currentPath = Directory.GetCurrentDirectory() + $"\\DiavoloLogs\\AdvancedLogger{formattedTime}.txt";
             StartTime = DateTime.Now;
             Info("------------------------------------------------------------");
         }
@@ -39,7 +41,7 @@ namespace LoggingUtil
             }
         }
 
-        private void createDirectory()
+        private void CreateDirectory()
         {
             try
             {
@@ -57,6 +59,5 @@ namespace LoggingUtil
             int totalSeconds = (int)duration.TotalSeconds;
             return string.Format("{0}:{1}", totalSeconds / 60, (totalSeconds % 60).ToString().PadLeft(2, '0')).PadLeft(6, ' ');
         }
-
     }
 }
