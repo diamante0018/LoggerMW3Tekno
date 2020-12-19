@@ -28,7 +28,7 @@ namespace LoggingUtil
                     if (IPList.Contains(player.IP.Address.ToString()))
                     {
                         Utilities.ExecuteCommand($"dropclient {player.EntRef} \"Same IP, different HWID. Is the cat stepping on the keyboard?\"");
-                        customLog.Info("Player {0} connecting with HWID: {1} was kicked because he had the same IP of another player but different HWID", player.Name, player.HWID);
+                        customLog.Info("Player {0} connecting with HWID: {1} was kicked because he has the same IP of another player but different HWID", player.Name, player.HWID);
                     }
                     else
                         IPList.Add(player.IP.Address.ToString());
@@ -36,7 +36,7 @@ namespace LoggingUtil
                     if(HWIDList.Contains(player.HWID))
                     {
                         Utilities.ExecuteCommand($"dropclient {player.EntRef} \"Same HWID of another online player. Is the cat stepping on the keyboard?\"");
-                        customLog.Info("Player {0} connecting with HWID: {1} was kicked because he had the same HWID of another online player", player.Name, player.HWID);
+                        customLog.Info("Player {0} connecting with HWID: {1} was kicked because he has the same HWID of another online player", player.Name, player.HWID);
                     }
                     else
                         HWIDList.Add(player.HWID);
