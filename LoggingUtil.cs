@@ -21,14 +21,14 @@ namespace LoggingUtil
 
             PlayerConnecting += (Entity player) =>
             {
-                customLog.Info("Player {0} connecting with IP: {1} with HWID: {2} with GUID: {3} with XUID: {4}", player.Name, player.IP.Address, player.HWID, player.GUID, player.GetXUID());
+                customLog.Info("Player {0} connecting with IP: {1} with HWID: {2} with GUID: {3} with XUID: {4} with ClanTag: {5} with Title: {6}", player.Name, player.IP.Address, player.HWID, player.GUID, player.GetXUID(), player.GetClanTag(), player.GetPlayerTitle());
 
                 if(sv_HWIDProtect)
                 {
                     if (IPList.Contains(player.IP.Address.ToString()))
                     {
                         Utilities.ExecuteCommand($"dropclient {player.EntRef} \"Same IP, different HWID. Is the cat stepping on the keyboard?\"");
-                        customLog.Info("Player {0} connecting with HWID: {1} was kicked because he has the same IP of another player but different HWID", player.Name, player.HWID);
+                        customLog.Info("Player {0} connecting with IP: {1} with HWID: {2} was kicked because he has the same IP of another player but different HWID", player.Name, player.IP.Address, player.HWID);
                     }
                     else
                         IPList.Add(player.IP.Address.ToString());
@@ -36,7 +36,7 @@ namespace LoggingUtil
                     if(HWIDList.Contains(player.HWID))
                     {
                         Utilities.ExecuteCommand($"dropclient {player.EntRef} \"Same HWID of another online player. Is the cat stepping on the keyboard?\"");
-                        customLog.Info("Player {0} connecting with HWID: {1} was kicked because he has the same HWID of another online player", player.Name, player.HWID);
+                        customLog.Info("Player {0} connecting with IP: {1} with HWID: {2} was kicked because he has the same HWID of another online player", player.Name, player.IP.Address, player.HWID);
                     }
                     else
                         HWIDList.Add(player.HWID);

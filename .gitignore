@@ -1,3 +1,6 @@
+.vs/
+*.suo
+
 obj/Release/VPNDetection.csprojAssemblyReference.cache
 obj/Release/VPNDetection.csproj.CoreCompileInputs.cache
 obj/Release/VPNDetection.csproj.FileListAbsolute.txt
