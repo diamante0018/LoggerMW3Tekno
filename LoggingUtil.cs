@@ -39,7 +39,7 @@ namespace LoggingUtil
 
                 string MyPlayerIP = IPArray[1];
                 string MyName = NameArray[1];
-                string MyHWID = HWIDArray[1];
+                string MyHWID = HWIDArray[1].ToUpper();
 
                 if (IPList.Contains(MyPlayerIP))
                 {
