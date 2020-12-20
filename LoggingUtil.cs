@@ -27,6 +27,13 @@ namespace LoggingUtil
                 IPList.Add(player.IP.Address.ToString());
                 HWIDList.Add(player.HWID);
             };
+
+            PlayerDisconnected += (Entity player) =>
+            {
+                bool IP = IPList.Remove(player.IP.Address.ToString());
+                bool HWID = HWIDList.Remove(player.HWID);
+                customLog.Info("Player {0} disconnected with IP: {1} with HWID: {2} Result: {3} {4} <- All must be True", player.Name, player.IP.Address, player.HWID, IP, HWID);
+            };
         }
 
         public override string OnPlayerRequestConnection(string playerName, string playerHWID, string playerXUID, string playerIP, string playerSteamID, string playerXNAddress)
@@ -54,12 +61,6 @@ namespace LoggingUtil
                 }
             }
             return null;
-        }
-
-        public override void OnPlayerDisconnect(Entity player)
-        {
-            IPList.Remove(player.IP.ToString());
-            HWIDList.Remove(player.HWID);
         }
     }
 }
