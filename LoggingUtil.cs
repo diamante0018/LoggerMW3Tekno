@@ -45,18 +45,18 @@ namespace LoggingUtil
                 string[] HWIDArray = playerHWID.Split('\\');
 
                 string MyPlayerIP = IPArray[1];
-                string MyName = NameArray[1];
-                string MyHWID = HWIDArray[1].ToUpper();
+                string MyPlayerName = NameArray[1];
+                string MyPlayerHWID = HWIDArray[1].ToUpper();
 
                 if (IPList.Contains(MyPlayerIP))
                 {
-                    customLog.Info("Player {0} connecting with IP: {1} with HWID: {2} was kicked because he has the same IP of another player but different HWID", MyName, MyPlayerIP, MyHWID);
+                    customLog.Info("Player {0} connecting with IP: {1} with HWID: {2} was kicked because he has the same IP of another player but different HWID", MyPlayerName, MyPlayerIP, MyPlayerHWID);
                     return "Same IP, different HWID. Is the cat stepping on the keyboard? Expect to be ^1Banned";
                 }
 
                 if (HWIDList.Contains(playerHWID))
                 {
-                    customLog.Info("Player {0} connecting with IP: {1} with HWID: {2} was kicked because he has the same HWID of another online player", MyName, MyPlayerIP, MyHWID);
+                    customLog.Info("Player {0} connecting with IP: {1} with HWID: {2} was kicked because he has the same HWID of another online player", MyPlayerName, MyPlayerIP, MyPlayerHWID);
                     return "Same HWID of another online player. Is the cat stepping on the keyboard? Expect to be ^1Banned";
                 }
             }
