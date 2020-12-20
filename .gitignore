@@ -1,5 +1,6 @@
 .vs/
 *.suo
+*.cache
 
 obj/Release/VPNDetection.csprojAssemblyReference.cache
 obj/Release/VPNDetection.csproj.CoreCompileInputs.cache
@@ -21,7 +22,6 @@ obj/Release/CustomLogger.csproj.CopyComplete
 obj/Release/CustomLogger.csproj.CoreCompileInputs.cache
 obj/Release/CustomLogger.csproj.FileListAbsolute.txt
 obj/Release/DesignTimeResolveAssemblyReferencesInput.cache
-obj/Release/Killstreak.csprojAssemblyReference.cache
 obj/Release/Logger.csproj.CopyComplete
 obj/Release/Logger.csproj.CoreCompileInputs.cache
 obj/Release/Logger.csproj.FileListAbsolute.txt
