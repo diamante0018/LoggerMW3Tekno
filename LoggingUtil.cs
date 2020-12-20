@@ -45,13 +45,13 @@ namespace LoggingUtil
                 {
                     customLog.Info("Player {0} connecting with IP: {1} with HWID: {2} was kicked because he has the same IP of another player but different HWID", MyName, MyPlayerIP, MyHWID);
                     return "Same IP, different HWID. Is the cat stepping on the keyboard? Expect to be ^1Banned";
-                }                
+                }
 
                 if (HWIDList.Contains(playerHWID))
-                {               
+                {
                     customLog.Info("Player {0} connecting with IP: {1} with HWID: {2} was kicked because he has the same HWID of another online player", MyName, MyPlayerIP, MyHWID);
                     return "Same HWID of another online player. Is the cat stepping on the keyboard? Expect to be ^1Banned";
-                }        
+                }
             }
             return null;
         }

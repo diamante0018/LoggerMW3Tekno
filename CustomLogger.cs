@@ -12,7 +12,7 @@ namespace LoggingUtil
         public CustomLogger()
         {
             DateTime dateTime = DateTime.UtcNow.Date;
-            string formattedTime = dateTime.ToString("dd/MM/yyyy").Replace("/","");
+            string formattedTime = dateTime.ToString("dd/MM/yyyy").Replace("/", "");
             CreateDirectory();
             currentPath = Directory.GetCurrentDirectory() + $"\\DiavoloLogs\\AdvancedLogger{formattedTime}.txt";
             StartTime = DateTime.Now;
