@@ -65,7 +65,7 @@ namespace LoggingUtil
                     return "Same HWID of another online player. Is the cat stepping on the keyboard? Expect to be ^1Banned^0!";
                 }
 
-                if(XUIDList.Contains(MyPlayerXUID))
+                if (XUIDList.Contains(MyPlayerXUID))
                 {
                     customLog.Info("Player {0} connecting with IP: {1} with HWID: {2} with XUID: {3} was kicked because he has the same XUID of another online player", MyPlayerName, MyPlayerIP, MyPlayerHWID, MyPlayerXUID);
                     return "Same XUID of another online player. Is the cat stepping on the keyboard? Expect to be ^1Banned^0!";
