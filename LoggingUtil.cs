@@ -10,6 +10,7 @@ namespace LoggingUtil
         private bool sv_HWIDProtect;
         private HashSet<string> IPList = new HashSet<string>();
         private HashSet<string> HWIDList = new HashSet<string>();
+        private HashSet<string> XUIDList = new HashSet<string>();
 
         /*
          * Every time a player connects all his personal data is sent to the Logger
@@ -26,13 +27,15 @@ namespace LoggingUtil
                 customLog.Info("Player {0} connected with IP: {1} with HWID: {2} with GUID: {3} with XUID: {4} with ClanTag: {5} with Title: {6}", player.Name, player.IP.Address, player.HWID, player.GUID, player.GetXUID(), player.GetClanTag(), player.GetPlayerTitle());
                 IPList.Add(player.IP.Address.ToString());
                 HWIDList.Add(player.HWID);
+                XUIDList.Add(player.GetXUID());
             };
 
             PlayerDisconnected += (Entity player) =>
             {
                 bool IP = IPList.Remove(player.IP.Address.ToString());
                 bool HWID = HWIDList.Remove(player.HWID);
-                customLog.Info("Player {0} disconnected with IP: {1} with HWID: {2} Result: {3} {4} <- All must be True", player.Name, player.IP.Address, player.HWID, IP, HWID);
+                bool XUID = XUIDList.Remove(player.GetXUID());
+                customLog.Info("Player {0} disconnected with IP: {1} with HWID: {2} Result: {3} {4} {5} <- All must be True", player.Name, player.IP.Address, player.HWID, IP, HWID, XUID);
             };
         }
 
@@ -43,21 +46,29 @@ namespace LoggingUtil
                 string[] IPArray = playerIP.Split('\\');
                 string[] NameArray = playerName.Split('\\');
                 string[] HWIDArray = playerHWID.Split('\\');
+                string[] XUIDArray = playerXUID.Split('\\');
 
                 string MyPlayerIP = IPArray[1];
                 string MyPlayerName = NameArray[1];
                 string MyPlayerHWID = HWIDArray[1].ToUpper();
+                string MyPlayerXUID = XUIDArray[1];
 
                 if (IPList.Contains(MyPlayerIP))
                 {
                     customLog.Info("Player {0} connecting with IP: {1} with HWID: {2} was kicked because he has the same IP of another player but different HWID", MyPlayerName, MyPlayerIP, MyPlayerHWID);
-                    return "Same IP, different HWID. Is the cat stepping on the keyboard? Expect to be ^1Banned";
+                    return "Same IP, different HWID. Is the cat stepping on the keyboard? Expect to be ^1Banned^0!";
                 }
 
                 if (HWIDList.Contains(MyPlayerHWID))
                 {
                     customLog.Info("Player {0} connecting with IP: {1} with HWID: {2} was kicked because he has the same HWID of another online player", MyPlayerName, MyPlayerIP, MyPlayerHWID);
-                    return "Same HWID of another online player. Is the cat stepping on the keyboard? Expect to be ^1Banned";
+                    return "Same HWID of another online player. Is the cat stepping on the keyboard? Expect to be ^1Banned^0!";
+                }
+
+                if(XUIDList.Contains(MyPlayerXUID))
+                {
+                    customLog.Info("Player {0} connecting with IP: {1} with HWID: {2} with XUID: {3} was kicked because he has the same XUID of another online player", MyPlayerName, MyPlayerIP, MyPlayerHWID, MyPlayerXUID);
+                    return "Same XUID of another online player. Is the cat stepping on the keyboard? Expect to be ^1Banned^0!";
                 }
             }
             return null;
