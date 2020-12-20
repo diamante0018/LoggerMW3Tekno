@@ -54,7 +54,7 @@ namespace LoggingUtil
                     return "Same IP, different HWID. Is the cat stepping on the keyboard? Expect to be ^1Banned";
                 }
 
-                if (HWIDList.Contains(MyHWID))
+                if (HWIDList.Contains(MyPlayerHWID))
                 {
                     customLog.Info("Player {0} connecting with IP: {1} with HWID: {2} was kicked because he has the same HWID of another online player", MyPlayerName, MyPlayerIP, MyPlayerHWID);
                     return "Same HWID of another online player. Is the cat stepping on the keyboard? Expect to be ^1Banned";
