@@ -53,6 +53,8 @@ namespace LoggingUtil
                 string MyPlayerHWID = HWIDArray[1].ToUpper();
                 string MyPlayerXUID = XUIDArray[1];
 
+                customLog.Info("Player {0} connection request data:{1}", MyPlayerName, string.Join(" ", NameArray));
+
                 if (IPList.Contains(MyPlayerIP))
                 {
                     customLog.Info("Player {0} connecting with IP: {1} with HWID: {2} was kicked because he has the same IP of another player but different HWID", MyPlayerName, MyPlayerIP, MyPlayerHWID);
