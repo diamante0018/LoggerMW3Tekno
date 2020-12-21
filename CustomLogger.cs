@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 
 namespace LoggingUtil
@@ -7,16 +8,19 @@ namespace LoggingUtil
     {
         private readonly string currentPath;
         private static DateTime StartTime;
+        private CultureInfo culture;
 
         /// <summary>constructor <c>CustomLogger</c> Initializes the logger.</summary>
         public CustomLogger()
         {
             DateTime dateTime = DateTime.UtcNow.Date;
+            culture = CultureInfo.CreateSpecificCulture("en-GB");
             string formattedTime = dateTime.ToString("dd/MM/yyyy").Replace("/", "");
             CreateDirectory();
             currentPath = Directory.GetCurrentDirectory() + $"\\DiavoloLogs\\AdvancedLogger{formattedTime}.txt";
             StartTime = DateTime.Now;
-            Info("------------------------------------------------------------");
+            dateTime = DateTime.UtcNow;
+            Info("Script loaded at {0}. Will now proceed to log every player that joins this server instance", dateTime.ToString("r", culture));
         }
 
         /// <summary>function <c>Info</c> Appends the string to the file with formatting.</summary>
