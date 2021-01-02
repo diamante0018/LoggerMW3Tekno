@@ -65,9 +65,6 @@ namespace LoggingUtil
             return string.Format("{0}:{1}", totalSeconds / 60, (totalSeconds % 60).ToString().PadLeft(2, '0')).PadLeft(6, ' ');
         }
 
-        private string CleanHostName(string hostName)
-        {
-            return Regex.Replace(hostName, @"\^[0-9]", "");
-        }
+        private string CleanHostName(string hostName) => Regex.Replace(hostName, @"(\^[0-9])|\^:", "");
     }
 }
