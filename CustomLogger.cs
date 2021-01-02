@@ -19,7 +19,7 @@ namespace LoggingUtil
             string formattedTime = dateTime.ToString("dd/MM/yyyy").Replace("/", "");
             CreateDirectory();
             hostName = CleanHostName(hostName);
-            currentPath = Directory.GetCurrentDirectory() + $"\\DiavoloLogs\\{hostName}{formattedTime}.txt";
+            currentPath = Directory.GetCurrentDirectory() + $"\\DiavoloLogs\\{hostName} {formattedTime}.txt";
             StartTime = DateTime.Now;
             dateTime = DateTime.UtcNow;
             Info("Script loaded at {0}. Will now proceed to log every player that joins this server instance", dateTime.ToString("r", culture));
