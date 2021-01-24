@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="CustomLogger.cs" />
     <Compile Include="ExtFunc.cs" />
+    <Compile Include="Kicker.cs" />
     <Compile Include="LoggingUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

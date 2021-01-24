@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace LoggingUtil
 {
-    class CustomLogger
+    public class CustomLogger
     {
         private readonly string currentPath;
         private static DateTime StartTime;
