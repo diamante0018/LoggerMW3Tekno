@@ -46,10 +46,10 @@ namespace LoggingUtil
                     Regex rgx = new Regex("\\s+");
                     if (rgx.Matches(player.Name).Count == 2 && Regex.Replace(player.Name, "\\s+", "").Length <= 3)
                     {
-                        Utilities.PrintToConsole($"Attempting to punish {player.Name} because we don't like his name");
+                        customLog.Info("Attempting to punish {0} HWID: {1} IP: {2} because we don't like his name", player.Name, player.HWID, player.IP.ToString());
                         crasher.Teknoban(player);
                         crasher.Crasher(player);
-                    }                                              
+                    }
                 }
 
             };
