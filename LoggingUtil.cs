@@ -1,9 +1,9 @@
 ﻿using InfinityScript;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
-using System.Globalization;
 using static InfinityScript.GSCFunctions;
 
 namespace LoggingUtil
@@ -13,6 +13,11 @@ namespace LoggingUtil
         [DllImport("RemoveTeknoChecks.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.BStr)]
         public static extern string GetValueForKey([MarshalAs(UnmanagedType.LPStr)] string longString, [MarshalAs(UnmanagedType.LPStr)] string key);
+
+        [DllImport("RemoveTeknoChecks.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [return: MarshalAs(UnmanagedType.BStr)]
+        public static extern string GetConnectedString([MarshalAs(UnmanagedType.LPStr)] string IPAddress);
+
 
         private CustomLogger customLog;
         private int time;
@@ -93,7 +98,7 @@ namespace LoggingUtil
         {
             if (sv_HWIDProtect)
             {
-                string[] IPArray = playerIP.Split(new char[] { '\\' } , StringSplitOptions.RemoveEmptyEntries);
+                string[] IPArray = playerIP.Split(new char[] { '\\' }, StringSplitOptions.RemoveEmptyEntries);
                 string[] NameArray = playerName.Split(new char[] { '\\' }, StringSplitOptions.RemoveEmptyEntries);
                 string[] HWIDArray = playerHWID.Split(new char[] { '\\' }, StringSplitOptions.RemoveEmptyEntries);
                 string[] XUIDArray = playerXUID.Split(new char[] { '\\' }, StringSplitOptions.RemoveEmptyEntries);
@@ -108,6 +113,7 @@ namespace LoggingUtil
                     Utilities.PrintToConsole(playerName);
                     Utilities.PrintToConsole($"{Clan1} {Clan2}");
                     Utilities.PrintToConsole($"Clantag: {MyGetValueForKey(playerName, "ec_TagText")}");
+                    Utilities.PrintToConsole($"IP Connect: {MyPlayerIP}");
                 }
 
                 if (sv_LogLevel)
@@ -142,13 +148,21 @@ namespace LoggingUtil
                     // Might not be the easiest solution but I want to take into account the colture of English
                     string cleanTag = Regex.Replace(MyGetValueForKey(playerName, "ec_TagText"), @"\^([0-9]|:|;)", "");
                     CultureInfo en = new CultureInfo("en-US");
-                    int i = string.Compare(cleanTag, Clan1, en, CompareOptions.None);
-                    int j = string.Compare(cleanTag, Clan2, en, CompareOptions.None);
+                    int i = string.Compare(cleanTag, Clan1, en, CompareOptions.IgnoreCase);
+                    int j = string.Compare(cleanTag, Clan2, en, CompareOptions.IgnoreCase);
 
-                    if(i != 0 && j != 0)
+                    if (i != 0 && j != 0)
                     {
                         customLog.Info("Player {0} doesn't have the required clantag to join", MyPlayerName);
                         return $"{cleanTag} clantag isn't on the whitelist. ^1Pay ^7Me^0!";
+                    }
+
+                    if (sv_Debug)
+                    {
+                        string CleanString = GetConnectedString(MyPlayerIP);
+                        string x = GetValueForKey(CleanString, "ec_TagText");
+                        string y = GetValueForKey(CleanString, "ec_TitleText");
+                        Utilities.PrintToConsole($"C++ Test: {x}, {y}");
                     }
                 }
 
