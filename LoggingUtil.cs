@@ -1,18 +1,27 @@
 ﻿using InfinityScript;
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using System.Globalization;
 using static InfinityScript.GSCFunctions;
 
 namespace LoggingUtil
 {
     public class LoggingUtil : BaseScript
     {
+        [DllImport("RemoveTeknoChecks.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [return: MarshalAs(UnmanagedType.BStr)]
+        public static extern string GetValueForKey([MarshalAs(UnmanagedType.LPStr)] string longString, [MarshalAs(UnmanagedType.LPStr)] string key);
+
         private CustomLogger customLog;
         private int time;
         private bool sv_HWIDProtect;
         private bool sv_LogLevel;
         private bool sv_ShortNames;
+        private bool sv_OnlyClantag;
+        private bool sv_Debug;
+        private string Clan1, Clan2;
         private HashSet<string> IPList = new HashSet<string>();
         private HashSet<string> HWIDList = new HashSet<string>();
         private HashSet<string> XUIDList = new HashSet<string>();
@@ -28,11 +37,18 @@ namespace LoggingUtil
             SetDvarIfUninitialized("sv_LogLevel", 1);
             SetDvarIfUninitialized("sv_ShortNames", 1);
             SetDvarIfUninitialized("sv_Cooldown", 10);
+            SetDvarIfUninitialized("sv_OnlyClantag", 0);
+            SetDvar("sv_allowedClan1", "AG");
+            SetDvar("sv_allowedClan2", "AU");
 
             sv_HWIDProtect = GetDvarInt("sv_HWIDProtect") == 1;
             sv_LogLevel = GetDvarInt("sv_LogLevel") == 1;
             sv_ShortNames = GetDvarInt("sv_ShortNames") == 1;
             time = GetDvarInt("sv_Cooldown");
+            sv_OnlyClantag = GetDvarInt("sv_OnlyClantag") == 1;
+            sv_Debug = GetDvarInt("com_printDebug") == 1;
+            Clan1 = GetDvar("sv_allowedClan1");
+            Clan2 = GetDvar("sv_allowedClan2");
 
             customLog = new CustomLogger(GetDvar("sv_hostname"));
             IPrintLn("Advanced Logger Made by ^1Diavolo ^7for ^6IS ^71.5.0");
@@ -42,6 +58,7 @@ namespace LoggingUtil
             {
                 if (sv_LogLevel)
                     customLog.Info("Player {0} connected with IP: {1} with HWID: {2} with GUID: {3} with XUID: {4} with ClanTag: {5} with Title: {6}", player.Name, player.IP.Address, player.HWID, player.GUID, player.GetXUID(), player.GetClanTag(), player.GetPlayerTitle());
+
                 IPList.Add(player.IP.Address.ToString());
                 HWIDList.Add(player.HWID);
                 XUIDList.Add(player.GetXUID());
@@ -75,15 +92,22 @@ namespace LoggingUtil
         {
             if (sv_HWIDProtect)
             {
-                string[] IPArray = playerIP.Split('\\');
-                string[] NameArray = playerName.Split('\\');
-                string[] HWIDArray = playerHWID.Split('\\');
-                string[] XUIDArray = playerXUID.Split('\\');
+                string[] IPArray = playerIP.Split(new char[] { '\\' } , StringSplitOptions.RemoveEmptyEntries);
+                string[] NameArray = playerName.Split(new char[] { '\\' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] HWIDArray = playerHWID.Split(new char[] { '\\' }, StringSplitOptions.RemoveEmptyEntries);
+                string[] XUIDArray = playerXUID.Split(new char[] { '\\' }, StringSplitOptions.RemoveEmptyEntries);
 
-                string MyPlayerIP = IPArray[1];
-                string MyPlayerName = NameArray[1];
-                string MyPlayerHWID = HWIDArray[1].ToUpper();
-                string MyPlayerXUID = XUIDArray[1];
+                string MyPlayerIP = IPArray[0];
+                string MyPlayerName = NameArray[0];
+                string MyPlayerHWID = HWIDArray[0].ToUpper();
+                string MyPlayerXUID = XUIDArray[0];
+
+                if (sv_Debug)
+                {
+                    Utilities.PrintToConsole(playerName);
+                    Utilities.PrintToConsole($"{Clan1} {Clan2}");
+                    Utilities.PrintToConsole($"Clantag: {MyGetValueForKey(playerName, "ec_TagText")}");
+                }
 
                 if (sv_LogLevel)
                     customLog.Info("Player {0} connection request data:{1}", MyPlayerName, string.Join(" ", NameArray));
@@ -104,6 +128,26 @@ namespace LoggingUtil
                 {
                     customLog.Info("Player {0} connecting with IP: {1} with HWID: {2} with XUID: {3} was kicked because he has the same XUID of another online player", MyPlayerName, MyPlayerIP, MyPlayerHWID, MyPlayerXUID);
                     return "Same XUID of another online player. Is the cat stepping on the keyboard? Expect to be ^1Banned^0!";
+                }
+
+                if (sv_OnlyClantag)
+                {
+                    if (MyGetValueForKey(playerName, "ec_usingTag").Equals("0", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        customLog.Info("Player {0} doesn't have a clantag", MyPlayerName);
+                        return "@MENU_NO_CLAN_DESCRIPTION";
+                    }
+
+                    string cleanTag = Regex.Replace(MyGetValueForKey(playerName, "ec_TagText"), @"\^([0-9]|:|;)", "");
+                    CultureInfo en = new CultureInfo("en-US");
+                    int i = string.Compare(cleanTag, Clan1, en, CompareOptions.None);
+                    int j = string.Compare(cleanTag, Clan2, en, CompareOptions.None);
+
+                    if(i != 0 && j != 0)
+                    {
+                        customLog.Info("Player {0} doesn't have the required clantag to join", MyPlayerName);
+                        return $"{cleanTag} clantag isn't on the whitelist. ^1Pay ^7Me^0!";
+                    }
                 }
 
                 return CheckCooldown(MyPlayerIP);
@@ -133,6 +177,13 @@ namespace LoggingUtil
             }
 
             return "";
+        }
+
+        public string MyGetValueForKey(string longString, string key)
+        {
+            string[] kv = longString.Split(new char[] { '\\' }, StringSplitOptions.RemoveEmptyEntries);
+            int index = Array.FindIndex(kv, x => x == key);
+            return (index + 1 < kv.Length) ? kv[index + 1] : "";
         }
     }
 }
