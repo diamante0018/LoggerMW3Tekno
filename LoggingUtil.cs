@@ -1,4 +1,5 @@
 ﻿using InfinityScript;
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using static InfinityScript.GSCFunctions;
@@ -8,12 +9,14 @@ namespace LoggingUtil
     public class LoggingUtil : BaseScript
     {
         private CustomLogger customLog;
+        private int time;
         private bool sv_HWIDProtect;
         private bool sv_LogLevel;
         private bool sv_ShortNames;
         private HashSet<string> IPList = new HashSet<string>();
         private HashSet<string> HWIDList = new HashSet<string>();
         private HashSet<string> XUIDList = new HashSet<string>();
+        private Dictionary<string, DateTime> coolDown = new Dictionary<string, DateTime>();
         private Kicker crasher = new Kicker();
 
         /*
@@ -21,13 +24,15 @@ namespace LoggingUtil
          */
         public LoggingUtil()
         {
-            SetDvarIfUninitialized("sv_HWIDProtect", "1");
-            SetDvarIfUninitialized("sv_LogLevel", "1");
-            SetDvarIfUninitialized("sv_ShortNames", "1");
+            SetDvarIfUninitialized("sv_HWIDProtect", 1);
+            SetDvarIfUninitialized("sv_LogLevel", 1);
+            SetDvarIfUninitialized("sv_ShortNames", 1);
+            SetDvarIfUninitialized("sv_Cooldown", 10);
 
             sv_HWIDProtect = GetDvarInt("sv_HWIDProtect") == 1;
             sv_LogLevel = GetDvarInt("sv_LogLevel") == 1;
             sv_ShortNames = GetDvarInt("sv_ShortNames") == 1;
+            time = GetDvarInt("sv_Cooldown");
 
             customLog = new CustomLogger(GetDvar("sv_hostname"));
             IPrintLn("Advanced Logger Made by ^1Diavolo ^7for ^6IS ^71.5.0");
@@ -59,6 +64,8 @@ namespace LoggingUtil
                 bool IP = IPList.Remove(player.IP.Address.ToString());
                 bool HWID = HWIDList.Remove(player.HWID);
                 bool XUID = XUIDList.Remove(player.GetXUID());
+                coolDown.Add(player.IP.Address.ToString(), DateTime.UtcNow);
+
                 if (sv_LogLevel)
                     customLog.Info("Player {0} disconnected with IP: {1} with HWID: {2} Result: {3} {4} {5} <- All must be True", player.Name, player.IP.Address, player.HWID, IP, HWID, XUID);
             };
@@ -98,10 +105,34 @@ namespace LoggingUtil
                     customLog.Info("Player {0} connecting with IP: {1} with HWID: {2} with XUID: {3} was kicked because he has the same XUID of another online player", MyPlayerName, MyPlayerIP, MyPlayerHWID, MyPlayerXUID);
                     return "Same XUID of another online player. Is the cat stepping on the keyboard? Expect to be ^1Banned^0!";
                 }
+
+                return CheckCooldown(MyPlayerIP);
             }
 
 
             return null;
+        }
+
+        public string CheckCooldown(string IP)
+        {
+            TimeSpan span;
+            if (coolDown.TryGetValue(IP, out DateTime value))
+            {
+                span = DateTime.UtcNow - value;
+                double seconds = span.TotalSeconds;
+
+                if (seconds <= time)
+                {
+                    customLog.Info("Player IP: {0} connected too quickly after leaving the server", IP);
+                    return "Cooldown man, no need to rage quit and connect immediately afterwards";
+                }
+                else
+                {
+                    coolDown.Remove(IP);
+                }
+            }
+
+            return "";
         }
     }
 }
