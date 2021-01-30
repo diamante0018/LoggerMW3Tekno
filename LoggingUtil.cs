@@ -43,6 +43,7 @@ namespace LoggingUtil
             SetDvarIfUninitialized("sv_ShortNames", 1);
             SetDvarIfUninitialized("sv_Cooldown", 10);
             SetDvarIfUninitialized("sv_OnlyClantag", 0);
+            SetDvarIfUninitialized("com_printDebug", 0);
             SetDvar("sv_allowedClan1", "AG");
             SetDvar("sv_allowedClan2", "AU");
 
@@ -107,14 +108,6 @@ namespace LoggingUtil
                 string MyPlayerName = NameArray[0];
                 string MyPlayerHWID = HWIDArray[0].ToUpper();
                 string MyPlayerXUID = XUIDArray[0];
-
-                if (sv_Debug)
-                {
-                    Utilities.PrintToConsole(playerName);
-                    Utilities.PrintToConsole($"{Clan1} {Clan2}");
-                    Utilities.PrintToConsole($"Clantag: {MyGetValueForKey(playerName, "ec_TagText")}");
-                    Utilities.PrintToConsole($"IP Connect: {MyPlayerIP}");
-                }
 
                 if (sv_LogLevel)
                     customLog.Info("Player {0} connection request data:{1}", MyPlayerName, string.Join(" ", NameArray));
