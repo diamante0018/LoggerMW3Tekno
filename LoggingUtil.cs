@@ -65,6 +65,7 @@ namespace LoggingUtil
 
                 if (sv_ShortNames)
                 {
+                    // Names like "a b c" will trigger this
                     Regex rgx = new Regex("\\s+");
                     if (rgx.Matches(player.Name).Count >= 2 && Regex.Replace(player.Name, "\\s+", "").Length <= 3)
                     {
@@ -138,6 +139,7 @@ namespace LoggingUtil
                         return "@MENU_NO_CLAN_DESCRIPTION";
                     }
 
+                    // Might not be the easiest solution but I want to take into account the colture of English
                     string cleanTag = Regex.Replace(MyGetValueForKey(playerName, "ec_TagText"), @"\^([0-9]|:|;)", "");
                     CultureInfo en = new CultureInfo("en-US");
                     int i = string.Compare(cleanTag, Clan1, en, CompareOptions.None);
@@ -157,6 +159,7 @@ namespace LoggingUtil
             return null;
         }
 
+        /// <summary>function <c>CheckCooldown</c> If the player joins too quickly he will be blocked temporarily.</summary>
         public string CheckCooldown(string IP)
         {
             TimeSpan span;
@@ -179,6 +182,7 @@ namespace LoggingUtil
             return "";
         }
 
+        /// <summary>function <c>MyGetValueForKey</c> Another implementation for GetValueForKey.</summary>
         public string MyGetValueForKey(string longString, string key)
         {
             string[] kv = longString.Split(new char[] { '\\' }, StringSplitOptions.RemoveEmptyEntries);
