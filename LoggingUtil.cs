@@ -10,15 +10,6 @@ namespace LoggingUtil
 {
     public class LoggingUtil : BaseScript
     {
-        [DllImport("RemoveTeknoChecks.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        [return: MarshalAs(UnmanagedType.BStr)]
-        public static extern string GetValueForKey([MarshalAs(UnmanagedType.LPStr)] string longString, [MarshalAs(UnmanagedType.LPStr)] string key);
-
-        [DllImport("RemoveTeknoChecks.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
-        [return: MarshalAs(UnmanagedType.BStr)]
-        public static extern string GetConnectedString([MarshalAs(UnmanagedType.LPStr)] string IPAddress);
-
-
         private CustomLogger customLog;
         private int time;
         private bool sv_HWIDProtect;
@@ -147,15 +138,7 @@ namespace LoggingUtil
                     if (i != 0 && j != 0)
                     {
                         customLog.Info("Player {0} doesn't have the required clantag to join", MyPlayerName);
-                        return $"{cleanTag} clantag isn't on the whitelist. ^1Pay ^7Me^0!";
-                    }
-
-                    if (sv_Debug)
-                    {
-                        string CleanString = GetConnectedString(MyPlayerIP);
-                        string x = GetValueForKey(CleanString, "ec_TagText");
-                        string y = GetValueForKey(CleanString, "ec_TitleText");
-                        Utilities.PrintToConsole($"C++ Test: {x}, {y}");
+                        return $"\"{cleanTag}\" clantag isn't on the whitelist. ^1Pay ^7Me^0!";
                     }
                 }
 
