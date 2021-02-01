@@ -131,9 +131,9 @@ namespace LoggingUtil
 
                     // Might not be the easiest solution but I want to take into account the colture of English
                     string cleanTag = Regex.Replace(MyGetValueForKey(playerName, "ec_TagText"), @"\^([0-9]|:|;)", "");
-                    CultureInfo en = new CultureInfo("en-US");
-                    int i = string.Compare(cleanTag, Clan1, en, CompareOptions.IgnoreCase);
-                    int j = string.Compare(cleanTag, Clan2, en, CompareOptions.IgnoreCase);
+                    CultureInfo en = new CultureInfo("en-US", false);
+                    int i = string.Compare(cleanTag, Clan1, en, CompareOptions.None);
+                    int j = string.Compare(cleanTag, Clan2, en, CompareOptions.None);
 
                     if (i != 0 && j != 0)
                     {
