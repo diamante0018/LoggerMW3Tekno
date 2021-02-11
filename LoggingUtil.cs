@@ -15,7 +15,6 @@ namespace LoggingUtil
         private bool sv_LogLevel;
         private bool sv_ShortNames;
         private bool sv_OnlyClantag;
-        private bool sv_Debug;
         private string Clan1, Clan2;
         private HashSet<string> IPList = new HashSet<string>();
         private HashSet<string> HWIDList = new HashSet<string>();
@@ -42,7 +41,6 @@ namespace LoggingUtil
             sv_ShortNames = GetDvarInt("sv_ShortNames") == 1;
             time = GetDvarInt("sv_Cooldown");
             sv_OnlyClantag = GetDvarInt("sv_OnlyClantag") == 1;
-            sv_Debug = GetDvarInt("com_printDebug") == 1;
             Clan1 = GetDvar("sv_allowedClan1");
             Clan2 = GetDvar("sv_allowedClan2");
 
@@ -151,10 +149,9 @@ namespace LoggingUtil
         /// <summary>function <c>CheckCooldown</c> If the player joins too quickly he will be blocked temporarily.</summary>
         public string CheckCooldown(string IP)
         {
-            TimeSpan span;
             if (coolDown.TryGetValue(IP, out DateTime value))
             {
-                span = DateTime.UtcNow - value;
+                TimeSpan span = DateTime.UtcNow - value;
                 double seconds = span.TotalSeconds;
 
                 if (seconds <= time)
