@@ -42,7 +42,6 @@ namespace LoggingUtil
                 sw.Write(FormatTime(DateTime.Now - StartTime));
                 sw.Write(" ");
                 sw.WriteLine(string.Format(format, args));
-                sw.Flush();
             }
         }
 
